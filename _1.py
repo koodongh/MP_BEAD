@@ -31,6 +31,7 @@ def PLC_():
                 #if is_Height != 0:
                     #Result = _H2104_detect.main(is_Height)
                 # test
+                time.sleep(3)
                 Result = 0
                 if Result == 0 :
                     comm.Write(tag_OK, True)
@@ -46,7 +47,7 @@ def PLC_():
                 is_OK = comm.Read(tag_OK)
                 is_NG = comm.Read(tag_NG)
 
-                comm.Write(tag_Ready, False)
+                #comm.Write(tag_Ready, False)
                 is_Cam = comm.Read(tag_Ready)
 
                 print(f"OK Status: {is_OK.bool_value}")
