@@ -12,9 +12,12 @@ def PLC_():
         tag_Ready = 'BP_Camera_Ready'      # 예시: 준비 상태
         tag_Height = 'BP_Camera_Packing_Height'  # 실수 태그
         tag_Spec = 'BP_Camera_Spec'        # 실수 태그
-
+        tag_TEST = 'BP_Camera_Test'
+        # Camera On
+        comm.Write(tag_TEST, True)
+        
         # Trigger On 
-        is_trigger = comm.Read(tag_trigger).bool_value
+        is_trigger = comm.Read(tag_trigger).Value
         if is_trigger == True :
         # bool 태그에 데이터 쓰기
             comm.Write(tag_trigger, False)  # 예시: 카메라 트리거를 활성화
@@ -31,14 +34,16 @@ def PLC_():
                 #if is_Height != 0:
                     #Result = _H2104_detect.main(is_Height)
                 # test
+                comm.Write(tag_TEST,True)
                 time.sleep(3)
+                print('----AI Detect----')
                 Result = 0
                 if Result == 0 :
                     comm.Write(tag_OK, True)
                 else: 
                     comm.Write(tag_NG, True)
                 
-                if Result:
+                if Result == 0:
                     print(f'Successfully wrote {Result} to {tag_Spec}')
                 else:
                     print(f'Failed to write to {tag_Spec}')
@@ -49,14 +54,16 @@ def PLC_():
 
                 #comm.Write(tag_Ready, False)
                 is_Cam = comm.Read(tag_Ready)
+                is_Test = comm.Read(tag_TEST)
 
-                print(f"OK Status: {is_OK.bool_value}")
-                print(f"NG Status: {is_NG.bool_value}")
-                print(f"Cam Status: {is_Cam.bool_value}")
-
-
+                print(f"OK Status: {is_OK.Value}")
+                print(f"NG Status: {is_NG.Value}")
+                print(f"Cam Status: {is_Cam.Value}")
+                print(f"Test Status: {is_Test.Value}")
+        
 
 if __name__ == '__main__':
     while True:
         PLC_()
+        print('----Wait----')
         time.sleep(0.5)
